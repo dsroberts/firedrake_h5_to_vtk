@@ -226,6 +226,7 @@ def main():
                 full_gpath = os.path.join(
                     group_path, gpath, "vecs", "firedrake_embedded_" + func, "firedrake_timestepping"
                 )
+                logger.info(f"    Checking at {full_gpath}")
                 if full_gpath in checkpoint_file.h5pyfile:
                     if "firedrake_timestepping_history_index" in checkpoint_file.h5pyfile[full_gpath].attrs:
                         timestepping[mesh_name][func] = [
@@ -233,8 +234,9 @@ def main():
                             for i in checkpoint_file.h5pyfile[full_gpath].attrs["firedrake_timestepping_history_index"]
                         ]
                         logger.info(f"    Found embedded timestepping data at {full_gpath}")
-                        continue
+                        break
                 full_gpath = os.path.join(group_path, gpath, "vecs", func, "firedrake_timestepping")
+                logger.info(f"    Checking at {full_gpath}")
                 if full_gpath in checkpoint_file.h5pyfile:
                     if "firedrake_timestepping_history_index" in checkpoint_file.h5pyfile[full_gpath].attrs:
                         timestepping[mesh_name][func] = [
@@ -242,7 +244,7 @@ def main():
                             for i in checkpoint_file.h5pyfile[full_gpath].attrs["firedrake_timestepping_history_index"]
                         ]
                         logger.info(f"    Found timestepping data at {full_gpath}")
-                        continue
+                        break
 
     ### Filter
     for mesh_name in mixed_functions:
